@@ -79,7 +79,11 @@ WSGI_APPLICATION = 'video_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'jamvin_db',
+        'USER': 'root',
+        'PASSWORD': 'root@1807',
+        'HOST': '165.227.144.81',  # au IP ya DB server yako
+        'PORT': '3306',
     }
 }
 
