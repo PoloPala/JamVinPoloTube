@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body>
+
+<!-- Mobile Navbar -->
+<nav class="navbar navbar-dark bg-dark d-md-none">
+    <div class="container-fluid">
+        <button class="btn btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+            ☰ Menu
+        </button>
+        <span class="navbar-brand mb-0">My Videos</span>
+    </div>
+</nav>
+
+<!-- Mobile Sidebar -->
+{% include 'video_app/snippets/mobile_sidebar.html' %}
+
+<!-- Main Layout -->
+<div class="d-flex flex-column flex-md-row min-vh-100">
+
+    <!-- Desktop Sidebar -->
+    {% include 'video_app/snippets/desktop_sidebar.html' %}
+
+    <!-- Video Content -->
+    <main class="flex-fill p-4">
+        <h2 class="text-center mb-4">Video Gallery</h2>
+        <div class="row">
+            {% for video in videos %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex align-items-stretch">
+                <div class="card shadow-sm w-100">
+                    <a href="{% url 'video_app:video_detail' video.pk %}">
+                        <video class="video-thumbnail" muted playsinline preload="metadata">
+                            <source src="{{ video.video_file.url }}#t=0.1" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </a>
+                    <div class="card-body">
+                        <h6 class="card-title mb-1">{{ video.title }}</h6>
+                        <p class="card-text small">{{ video.description|truncatechars:80 }}</p>
+                        <a href="{% url 'video_app:video_detail' video.pk %}" class="btn btn-sm btn-primary">Watch</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-center text-white py-3 mt-5">
+  <div class="container">
+    <p class="mb-1">&copy; {{ year }} MyVideoSite. All rights reserved.</p>
+    <small>Developed with ❤️ using Django and Bootstrap</small>
+  </div>
+</footer>
+
+<!-- JS Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Toggle desktop sidebar
+    document.getElementById('toggleSidebar').addEventListener('click', function () {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('collapsed-sidebar');
+        sidebar.classList.toggle('full-sidebar');
+    });
+
+    // Play video on hover
+    document.addEventListener("DOMContentLoaded", function () {
+        const videoThumbs = document.querySelectorAll(".video-thumbnail");
+
+        videoThumbs.forEach(video => {
+            video.addEventListener("mouseenter", () => {
+                video.play();
+            });
+
+            video.addEventListener("mouseleave", () => {
+                video.pause();
+                video.currentTime = 0;
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

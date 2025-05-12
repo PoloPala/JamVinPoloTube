@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body>
+
+<!-- Mobile Navbar -->
+<nav class="navbar navbar-dark bg-dark d-md-none">
+    <div class="container-fluid">
+        <button class="btn btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+            ☰ Menu
+        </button>
+        <span class="navbar-brand mb-0">My Videos</span>
+    </div>
+</nav>
+
+<!-- Mobile Sidebar -->
+{% include 'video_app/snippets/mobile_sidebar.html' %}
+
+<!-- Main Layout -->
+<div class="d-flex flex-column flex-md-row min-vh-100">
+
+    <!-- Desktop Sidebar -->
+    {% include 'video_app/snippets/desktop_sidebar.html' %}
+
+    <!-- Video Content -->
+    <main class="flex-fill p-4">
+        <h2 class="text-center mb-2">Upload a New Video</h2>
+        <div class="row">
+
+
+            <div class="col-md-9">
+
+
+                <div class="container mt-5">
+                    <form method="post" enctype="multipart/form-data" class="bg-secondary p-4 rounded">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.title.label_tag }} {{ form.title }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.description.label_tag }} {{ form.description }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.video_file.label_tag }} {{ form.video_file }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.latitude.label_tag }} {{ form.latitude }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.longitude.label_tag }} {{ form.longitude }}
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload Video</button>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </main>
+</div>
+
+<!-- JS Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Toggle desktop sidebar
+    document.getElementById('toggleSidebar').addEventListener('click', function () {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('collapsed-sidebar');
+        sidebar.classList.toggle('full-sidebar');
+    });
+
+    // Play video on hover
+    document.addEventListener("DOMContentLoaded", function () {
+        const videoThumbs = document.querySelectorAll(".video-thumbnail");
+
+        videoThumbs.forEach(video => {
+            video.addEventListener("mouseenter", () => {
+                video.play();
+            });
+
+            video.addEventListener("mouseleave", () => {
+                video.pause();
+                video.currentTime = 0;
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
